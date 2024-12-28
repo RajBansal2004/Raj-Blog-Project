@@ -1,9 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useBlogs } from "../contexts/BlogContext"; // Import the BlogContext
 
 const BlogCard = ({ blog }) => {
   const { user } = useAuth(); 
+  const { deleteBlog } = useBlogs();
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete "${blog.title}"?`)) {
+      deleteBlog(blog.title);  
+    }
+  };
 
   return (
     <div className="blog-card">
@@ -15,6 +22,11 @@ const BlogCard = ({ blog }) => {
         <Link to={`/edit-blog/${blog.title}`} className="edit-blog-button">
           Edit Blog
         </Link>
+      )}
+    {user && (
+        <button onClick={handleDelete} className="delete-blog-button">
+          Delete Blog
+        </button>
       )}
     </div>
   );
